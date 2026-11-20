@@ -15,6 +15,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Unpack project zip
+        run: |
+          if [ ! -f build.gradle ]; then
+            Z=$(ls aetherium*.zip 2>/dev/null | head -n1 || true)
+            if [ -z "$Z" ]; then echo "Нет build.gradle и нет zip проекта"; ls -la; exit 1; fi
+            unzip -o -q "$Z" -x '.github/*'
+          fi
+
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
